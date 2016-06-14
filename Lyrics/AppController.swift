@@ -33,6 +33,7 @@ class AppController: NSObject, NSUserNotificationCenterDelegate {
     private var idTagsArray: [String]!
     private var iTunes: iTunesBridge!
     private var currentLyrics: String!
+    private var defaultLyrics: String!
     private var currentSongID: String!
     private var currentSongTitle: String!
     private var currentArtist: String!
@@ -51,6 +52,7 @@ class AppController: NSObject, NSUserNotificationCenterDelegate {
     override private init() {
         super.init()
         iTunes = iTunesBridge()
+        defaultLyrics = iTunes.defaultLyrics()
         lrcParser = LrcParser()
         lyricsArray = Array()
         idTagsArray = Array()
@@ -157,7 +159,7 @@ class AppController: NSObject, NSUserNotificationCenterDelegate {
             currentSongID = iTunes.currentPersistentID()
             currentSongTitle = iTunes.currentTitle()
             currentArtist = iTunes.currentArtist()
-            
+            defaultLyrics = iTunes.defaultLyrics()
             if currentSongID == "" {
                 // If iTunes is playing Apple Music, nothing can get from API,
                 // so, we should pause and then play to force iTunes send
@@ -716,10 +718,12 @@ class AppController: NSObject, NSUserNotificationCenterDelegate {
                 currentSongTitle = songTitle
                 currentArtist = artist
                 if currentSongID != "" {
+                    defaultLyrics = iTunes.defaultLyrics()
                     NSLog("Song Changed to: %@",currentSongTitle)
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
                         self.handleSongChange()
                     })
+                    //print("%@",defaultLyrics);
                 } else {
                     NSLog("iTunes Stopped")
                 }
@@ -750,7 +754,16 @@ class AppController: NSObject, NSUserNotificationCenterDelegate {
                 break
             }
         } else {
-            lrcToParse = lrcContents
+            //lrcToParse = lrcContents
+            if(defaultLyrics.characters.count>30)
+            {
+                print("loading defaut Lyrics from MP3 file:")
+                //print(defaultLyrics)
+                lrcToParse = defaultLyrics
+            }else{
+                print("no default Lyrics found!")
+                lrcToParse = lrcContents
+            }
         }
         
         if userDefaults.boolForKey(LyricsEnableFilter) {

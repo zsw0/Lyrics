@@ -18,6 +18,7 @@
 -(NSString *) currentArtist;
 -(NSString *) currentAlbum;
 -(NSString *) currentPersistentID;
+-(NSString *) defaultLyrics;
 -(NSInteger) playerPosition;
 -(NSData *) artwork;
 -(void) setLyrics: (NSString *)lyrics;

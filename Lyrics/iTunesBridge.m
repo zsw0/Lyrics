@@ -125,6 +125,16 @@
     }
 }
 
+-(NSString *) defaultLyrics {
+    @autoreleasepool {
+        NSString *defaultLyrics = iTunes.currentTrack.lyrics;
+        if (!defaultLyrics) {
+            defaultLyrics = @"";
+        }
+        return defaultLyrics;
+    }
+}
+
 -(NSInteger) playerPosition {
     @autoreleasepool {
         return (NSInteger)(iTunes.playerPosition * 1000);
