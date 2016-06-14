@@ -723,7 +723,6 @@ class AppController: NSObject, NSUserNotificationCenterDelegate {
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
                         self.handleSongChange()
                     })
-                    //print("%@",defaultLyrics);
                 } else {
                     NSLog("iTunes Stopped")
                 }
@@ -754,14 +753,12 @@ class AppController: NSObject, NSUserNotificationCenterDelegate {
                 break
             }
         } else {
-            //lrcToParse = lrcContents
             if(defaultLyrics.characters.count>30)
             {
-                print("loading defaut Lyrics from MP3 file:")
-                //print(defaultLyrics)
+                NSLog("loading default Lyrics from MP3 file")
                 lrcToParse = defaultLyrics
             }else{
-                print("no default Lyrics found!")
+                NSLog("no default Lyrics found!")
                 lrcToParse = lrcContents
             }
         }
